@@ -28,8 +28,12 @@
         </div>
         <br />
         <div>
-            <button onclick="toggleInteractivity()">Select Points</button>
-            <button onclick="runAlgo()">Run Algorithm</button>
+            <button id="selection" onclick="toggleInteractivity()">
+                Select Points
+            </button>
+            <button onclick="runAlgo('classical')">Run Classical</button>
+            <button onclick="runAlgo('quantum')">Run Quantum</button>
+            <label for="quantity">Number of Vehicles: </label>
             <input
                 type="number"
                 id="quantity"

@@ -30,7 +30,6 @@ def solve_classical(message):
         message["X"],
         message["Y"],
     )
-    print("HEre")
     initializer = Initializer(n)
     instance = initializer.generate_instance(xc, yc)
     classical_optimizer = ClassicalOptimizer(instance, n, K)
@@ -42,6 +41,8 @@ def solve_classical(message):
         z = [x[ii] for ii in range(n ** 2) if ii // n != ii % n]
         resp["x"] = x.tolist()
         resp["z"] = z
+        session["z"] = z
+        session["classical_cost"] = classical_cost
     except:
         resp["error"] = "CPLEX maybe missing."
     print(resp)
@@ -49,21 +50,22 @@ def solve_classical(message):
 
 
 @socketio.on("quantum", namespace="/compute")
-def solve_quantum():
+def solve_quantum(message):
     resp = {}
     n, K, xc, yc = (
-        request.json["n"],
-        request.json["K"],
-        request.json["xc"],
-        request.json["yc"],
+        message["n"],
+        int(message["K"]),
+        message["X"],
+        message["Y"],
     )
     initializer = Initializer(n)
     instance = initializer.generate_instance(xc, yc)
     quantum_optimizer = QuantumOptimizer(instance, n, K)
 
-    z = None
     # Check if the binary representation is correct
-    if z is not None:
+    if "z" in session:
+        z = session["z"]
+        classical_cost = session["classical_cost"]
         Q, g, c, binary_cost = quantum_optimizer.binary_representation(x_sol=z)
         resp["binary_cost"] = binary_cost
         resp["classical_cost"] = classical_cost
@@ -92,11 +94,12 @@ def solve_quantum():
             x_quantum[ii] = quantum_solution[kk]
             kk += 1
 
-    resp["x_quantum"] = x_quantum.tolist()
+    resp["x"] = x_quantum.tolist()
 
+    if "z" in session:
+        del session["z"]
     print(resp)
-
-    return resp
+    emit("quantum_response", resp)
 
 
 if __name__ == "__main__":

@@ -1,13 +1,22 @@
 let interactive = true;
 let points = {
     "X": [],
-    "Y": []
+    "Y": [],
+    "markers": []
 };
 let K = 0;
 
 let socket = io("http://127.0.0.1:5000/compute");
 socket.on("connect", function () {
     console.log('Connected');
+});
+
+socket.on("classical_response", function (message) {
+    drawData(message, 'classical');
+});
+
+socket.on("quantum_response", function (message) {
+    drawData(message, 'quantum');
 });
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoia2FkOTlrZXYiLCJhIjoiY2p3cmg1YWV0MDdtMjQ4bWVwcjBsOWxxaSJ9.YAmQRxiKv1n2_OtLslMcgQ';
@@ -40,61 +49,108 @@ map.on('click', function (e) {
             alert('Maximum of 4 points can be selected');
             return;
         }
-        new mapboxgl.Marker()
+        let marker = new mapboxgl.Marker()
             .setLngLat([e.lngLat.lng, e.lngLat.lat])
             .addTo(map);
         points['X'].push(e.lngLat.lng);
         points['Y'].push(e.lngLat.lat);
+        points["markers"].push(marker);
     }
 });
 
-map.on('load', function () {
-    map.addSource('geojson', {
-        'type': 'geojson',
-        'data': geojson
-    });
-
-    // Add styles to the map
-    map.addLayer({
-        id: 'measure-points',
-        type: 'circle',
-        source: 'geojson',
-        paint: {
-            'circle-radius': 5,
-            'circle-color': '#000'
-        },
-        filter: ['in', '$type', 'Point']
-    });
-    map.addLayer({
-        id: 'measure-lines',
-        type: 'line',
-        source: 'geojson',
-        layout: {
-            'line-cap': 'round',
-            'line-join': 'round'
-        },
-        paint: {
-            'line-color': '#000',
-            'line-width': 2.5
-        },
-        filter: ['in', '$type', 'LineString']
-    });
-});
-
 // GeoJSON object to hold our measurement features
-var geojson = {
+var classicalJson = {
     'type': 'FeatureCollection',
     'features': []
 };
 
 // Used to draw a line between points
-var linestring = {
+var classicalString = {
     'type': 'Feature',
     'geometry': {
         'type': 'LineString',
         'coordinates': []
     }
 };
+
+// GeoJSON object to hold our measurement features
+var quantumJson = {
+    'type': 'FeatureCollection',
+    'features': []
+};
+
+// Used to draw a line between points
+var quantumString = {
+    'type': 'Feature',
+    'geometry': {
+        'type': 'LineString',
+        'coordinates': []
+    }
+};
+
+map.on('load', function () {
+    map.addSource('classicalJson', {
+        'type': 'geojson',
+        'data': classicalJson
+    });
+
+    map.addSource('quantumJson', {
+        'type': 'geojson',
+        'data': classicalJson
+    });
+
+    // Add styles to the map
+    map.addLayer({
+        id: 'classical-measure-points',
+        type: 'circle',
+        source: 'classicalJson',
+        paint: {
+            'circle-radius': 5,
+            'circle-color': 'red'
+        },
+        filter: ['in', '$type', 'Point']
+    });
+    map.addLayer({
+        id: 'classical-measure-lines',
+        type: 'line',
+        source: 'classicalJson',
+        layout: {
+            'line-cap': 'round',
+            'line-join': 'round'
+        },
+        paint: {
+            'line-color': 'red',
+            'line-width': 2.5
+        },
+        filter: ['in', '$type', 'LineString']
+    });
+
+    // Add styles to the map
+    map.addLayer({
+        id: 'quantum-measure-points',
+        type: 'circle',
+        source: 'quantumJson',
+        paint: {
+            'circle-radius': 5,
+            'circle-color': 'black'
+        },
+        filter: ['in', '$type', 'Point']
+    });
+    map.addLayer({
+        id: 'quantum-measure-lines',
+        type: 'line',
+        source: 'quantumJson',
+        layout: {
+            'line-cap': 'round',
+            'line-join': 'round'
+        },
+        paint: {
+            'line-color': 'black',
+            'line-width': 2.5
+        },
+        filter: ['in', '$type', 'LineString']
+    });
+});
 
 function changeK() {
     K = document.getElementById('quantity').value;
@@ -103,6 +159,8 @@ function changeK() {
 function toggleInteractivity() {
     interactive = !interactive;
     if (!interactive) {
+        let ref = document.getElementById('selection');
+        ref.innerHTML = "Clear Selection";
         map.boxZoom.disable();
         map.scrollZoom.disable();
         map.dragPan.disable();
@@ -111,6 +169,9 @@ function toggleInteractivity() {
         map.doubleClickZoom.disable();
         map.touchZoomRotate.disable();
     } else {
+        let ref = document.getElementById('selection');
+        ref.innerHTML = "Select Points";
+        clearMarkers();
         map.boxZoom.enable();
         map.scrollZoom.enable();
         map.dragPan.enable();
@@ -121,26 +182,30 @@ function toggleInteractivity() {
     }
 }
 
-function runAlgo() {
+function runAlgo(type) {
     if (!interactive) {
         let data = {}
         data['K'] = K
         data['n'] = points['X'].length;
         data['X'] = points['X'];
         data['Y'] = points['Y'];
-        socket.emit("classical", data);
+        if (type === 'classical') {
+            socket.emit("classical", data);
+        } else {
+            socket.emit("quantum", data);
+        }
     }
 }
 
-socket.on("classical_response", function (message) {
-    drawData(message);
-});
+function drawData(data, type) {
 
-socket.on("quantum_response", function (message) {
-    console.log(message);
-});
 
-function drawData(data) {
+    if (type === 'classical') {
+        clearData('quantum');
+    } else {
+        clearData('classical')
+    }
+
     let x = data['x'];
     let n = points['X'].length;
     let xc = points['X'];
@@ -172,17 +237,81 @@ function drawData(data) {
                     'id': String(new Date().getTime())
                 }
             };
-            geojson.features.push(point1);
-            geojson.features.push(point2);
-            if (geojson.features.length > 1) {
-                linestring.geometry.coordinates = geojson.features.map(
-                    function (point) {
-                        return point.geometry.coordinates;
-                    }
-                );
-                geojson.features.push(linestring);
+            if (type === 'classical') {
+                classicalJson.features.push(point1);
+                classicalJson.features.push(point2);
+                if (classicalJson.features.length > 1) {
+                    classicalString.geometry.coordinates = classicalJson.features.map(
+                        function (point) {
+                            return point.geometry.coordinates;
+                        }
+                    );
+                    classicalJson.features.push(classicalString);
+                }
+            } else {
+                quantumJson.features.push(point1);
+                quantumJson.features.push(point2);
+                if (quantumJson.features.length > 1) {
+                    quantumString.geometry.coordinates = quantumJson.features.map(
+                        function (point) {
+                            return point.geometry.coordinates;
+                        }
+                    );
+                    quantumJson.features.push(quantumString);
+                }
             }
+
         }
     }
-    map.getSource('geojson').setData(geojson);
+    if (type === 'classical') {
+        map.getSource('classicalJson').setData(classicalJson);
+
+    } else {
+        map.getSource('quantumJson').setData(quantumJson);
+
+    }
+}
+
+function clearData(type) {
+    if (type === 'classical') {
+        // GeoJSON object to hold our measurement features
+        classicalJson = {
+            'type': 'FeatureCollection',
+            'features': []
+        };
+
+        // Used to draw a line between points
+        classicalString = {
+            'type': 'Feature',
+            'geometry': {
+                'type': 'LineString',
+                'coordinates': []
+            }
+        };
+        map.getSource('classicalJson').setData(classicalJson);
+    } else {
+        // GeoJSON object to hold our measurement features
+        quantumJson = {
+            'type': 'FeatureCollection',
+            'features': []
+        };
+
+        // Used to draw a line between points
+        quantumString = {
+            'type': 'Feature',
+            'geometry': {
+                'type': 'LineString',
+                'coordinates': []
+            }
+        };
+        map.getSource('quantumJson').setData(quantumJson);
+    }
+}
+
+function clearMarkers() {
+    for (let marker of points["markers"]) {
+        marker.remove();
+    }
+    points["X"] = [];
+    points["Y"] = [];
 }
