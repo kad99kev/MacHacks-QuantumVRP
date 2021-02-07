@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <title>QVR</title>
+    
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -17,32 +19,257 @@
             rel="stylesheet"
         />
         <script src="https://cdn.socket.io/3.1.1/socket.io.min.js"></script>
+        <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../static/css/owl.carousel.min.css">
+        <link rel="stylesheet" href="../static/css/magnific-popup.css">
+        <link rel="stylesheet" href="../static/css/font-awesome.min.css">
+        <link rel="stylesheet" href="../static/css/themify-icons.css">
+        <link rel="stylesheet" href="../static/css/nice-select.css">
+        <link rel="stylesheet" href="../static/css/flaticon.css">
+        <link rel="stylesheet" href="../static/css/gijgo.css">
+        <link rel="stylesheet" href="../static/css/animate.min.css">
+        <link rel="stylesheet" href="../static/css/slick.css">
+        <link rel="stylesheet" href="../static/css/slicknav.css">
+        <link rel="stylesheet" href="../static/css/style.css">
 
         <title>MacHacks</title>
     </head>
 
     <body>
-        <div>
-            <div id="map" style="width: 1000px; height: 500px"></div>
-            <pre id="info"></pre>
+        <header>
+            <div class="header-area ">
+                <div id="header" class="main-header-area">
+                    <div class="container-fluid">
+                        <div class="row align-items-center">
+                            <div class="col-xl-3 col-lg-2">
+                                <div class="logo">
+                                    <a href="index.html">
+                                        <img src="../static/img/logo.png" alt="">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-7">
+                                <div class="main-menu  d-none d-lg-block">
+                                    <nav>
+                                        <ul id="navigation">
+                                            
+                                            <li><a>                           </a></li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="mobile_menu d-block d-lg-none"></div>
+                            </div>
+                        </div>
+    
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- header-end -->
+    
+        <!-- slider_area_start -->
+        <div class="slider_area">
+            <div class="single_slider  d-flex align-items-center slider_bg_1">
+                <div class="shap_pattern d-none d-lg-block">
+                    <img src="../static/img/about/grid.png" alt="">
+                </div>
+                <div class="social_links">
+                    <ul>
+                        <li><a href="#"> <i class="fa fa-facebook"></i> </a></li>
+                        <li><a href="#"> <i class="fa fa-twitter"></i> </a></li>
+                        <li><a href="#"> <i class="fa fa-instagram"></i> </a></li>
+                    </ul>
+                </div>
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-xl-12">
+                            <div class="slider_text text-center">
+                                <h3>
+                                    Quantum Vehicle Routing 
+                                </h3>
+                                <span> Routing made effective </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <br />
-        <div>
-            <button id="selection" onclick="toggleInteractivity()">
-                Select Points
-            </button>
-            <button onclick="runAlgo('classical')">Run Classical</button>
-            <button onclick="runAlgo('quantum')">Run Quantum</button>
-            <label for="quantity">Number of Vehicles: </label>
-            <input
-                type="number"
-                id="quantity"
-                name="quantity"
-                min="1"
-                max="2"
-                onchange="changeK()"
-            />
+        <!-- slider_area_end -->
+    
+        <!-- service_area  -->
+        <div class="service_area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="section_title text-center mb-65">
+                            <span>Service Provided</span>
+                            <h3>Finding the best possible  <br>
+                                    Routes to deliver goods and meds</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-4 col-md-4">
+                        <div class="single_service text-center">
+                            <div class="icon">
+                                <img src="../static/img/drones/high-resolution-drone-png-clipart-13.png" alt="">
+                            </div>
+                            <h3>Vaccines</h3>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-md-4">
+                        <div class="single_service text-center">
+                            <div class="icon">
+                                <img src="../static/img/drones/Helicopter-PNG-Transparent.png" height="320px" width="300" alt="">
+                            </div>
+                            <h3>Cargo</h3>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-md-4">
+                        <div class="single_service text-center">
+                            <div class="icon">
+                                <img src="../static/img/drones/Flying-Airplane-PNG-Transparent-HD-Photo.png" height ="200px" width="200px" alt="">
+                            </div>
+                            <h3>Travel</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+        <!--/ service_area  -->
+    
+        <!-- portfolio_area -->
+        <div class="portfolio_area portfolio_bg_1">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="section_title white_text text-center">
+                            <h3>Lets give it a Try <br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/ portfolio_area -->
+    
+        <!-- portfolio_image_area  -->
+        <div class="portfolio_image_area">
+            <div class="container">
+                <div class="row">
+                    <div>
+                        <div id="map" style="width: 1000px; height: 500px"></div>
+                        <pre id="info"></pre>
+                    </div>
+                    <br />
+                    <div>
+                        <button id="selection" onclick="toggleInteractivity()">
+                            Select Points
+                        </button>
+                        <button onclick="runAlgo('classical')">Run Classical</button>
+                        <button onclick="runAlgo('quantum')">Run Quantum</button>
+                        <label for="quantity">Number of Vehicles: </label>
+                        <input
+                            type="number"
+                            id="quantity"
+                            name="quantity"
+                            defaultValue="1"
+                            min="1"
+                            max="2"
+                            onchange="changeK()"
+                        />
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <!--/ portfolio_image_area  -->
+    
+        <!-- about_me  -->
+        <div class="about_me">
+            <div class="about_large_title d-none d-lg-block">
+                    About
+            </div>
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-xl-6 col-md-6">
+                        <div class="about_e_details">
+                            <h3>About QVR</h3>
+                            <p>Vehicle Routing Problem (VRP) is classified an NP-hard problem, which simply said the bigger your options, the cost of finding the best solution will grow tremendously.
+                                We as a team of 4 people have worked on this specific problem using the resources given to us one of them including Qiskit.
+                                In the center, VRP can be said as an optimization problem, which usually goes like this:
+                                Given my capacity of N fleet, and a set of M locations that needs to be visited, how can I achieve the best combination possible?
+                                Now while the problem sounds very similar to TSP, it differs in several points:
+                                VRP involves multiple moving actors, in this case a fleet of vehicle (car, bikes, etc), while TSP usually described with 1 sales.
+                                VRP is, though it can be relative on case by case basis, be subject to multiple constraints, be it on the vehicle’s capabilities (capacity, skills, size, etc) or even the visited location (serving time window, location, etc).
+                                </p>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-6">
+                        <div class="about_img">
+                            <div class="color_pattern d-none d-lg-block">
+                                <img src="../static/img/about/color_grid.png" alt="">
+                            </div>
+                            <div class="my_Pic">
+                                    <img src="../static/js/up (4).png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/ about_me  -->
+
+
     </body>
+    <footer class="footer align-items-center"">
+        <div class="footer_top">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-xl-6 col-md-6">
+                        <div class="menu_links">
+                            <ul>
+                                <li><a target="_blank" href="https://github.com/anushkrishnav/QVR">GitHub</a></li>
+                                <li><a target="_blank" href="https://devpost.com/software/quantum-computing-submission">Devpost</a></li>
+                                <li><a target="_blank" href="https://colab.research.google.com/drive/1X45_bCvQvrGbl0iOFTDYsXUjWX_v27f4?usp=sharing">Colaboratory Notebook</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-md-6">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </footer>
     <script src="/static/main.js"></script>
+        <!-- JS here -->
+        <script src="../static/js/vendor/modernizr-3.5.0.min.js"></script>
+        <script src="../static/js/vendor/jquery-1.12.4.min.js"></script>
+        <script src="../static/js/popper.min.js"></script>
+        <script src="../static/js/bootstrap.min.js"></script>
+        <script src="../static/js/owl.carousel.min.js"></script>
+        <script src="../static/js/isotope.pkgd.min.js"></script>
+        <script src="../static/js/ajax-form.js"></script>
+        <script src="../static/js/waypoints.min.js"></script>
+        <script src="../static/js/jquery.counterup.min.js"></script>
+        <script src="../static/js/imagesloaded.pkgd.min.js"></script>
+        <script src="../static/js/scrollIt.js"></script>
+        <script src="../static/js/jquery.scrollUp.min.js"></script>
+        <script src="../static/js/wow.min.js"></script>
+        <script src="../static/js/nice-select.min.js"></script>
+        <script src="../static/js/jquery.slicknav.min.js"></script>
+        <script src="../static/js/jquery.magnific-popup.min.js"></script>
+        <script src="../static/js/plugins.js"></script>
+        <script src="../static/js/gijgo.min.js"></script>
+    
+        <!--contact js-->
+        <script src="../static/js/contact.js"></script>
+        <script src="../static/js/jquery.ajaxchimp.min.js"></script>
+        <script src="../static/js/jquery.form.js"></script>
+        <script src="../static/js/jquery.validate.min.js"></script>
+        <script src="../static/js/mail-script.js"></script>
+    
+        <script src="../static/js/main.js"></script>
 </html>
