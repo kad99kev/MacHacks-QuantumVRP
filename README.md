@@ -21,3 +21,5 @@ You can also check out our [Colaboratory Notebook.](https://colab.research.googl
 
 # Note
 Unfortunately, due to time constraints, the website might come across as a bit buggy. But the notebook works!
+
+[Here](https://github.com/anushkrishnav/QVR) is a link to the repository that Anush created. He plans to deploy it on Azure.
