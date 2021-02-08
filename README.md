@@ -7,13 +7,13 @@
 Project Title: “Delivering Vaccines Using Qiskit and Vehicle Routing Problem”
 
 ## What this repository is?
-This repository contains the solution for MacHacks 2021.
+This repository contains the solution for MacHacks 2021. We were declared as the "Best Quantum Computing Hack"!
 
 You can visit our [Devpost](https://devpost.com/software/quantum-computing-submission) submission for more information.
 
 You can also check out our [Colaboratory Notebook.](https://colab.research.google.com/drive/1X45_bCvQvrGbl0iOFTDYsXUjWX_v27f4?usp=sharing)
 
-# The Team
+## The Team
 1. [Ron Koshita](https://github.com/rkoshita)
 2. [Kartik Chaudhary](https://devpost.com/kartutanu)
 3. [Anush Krishna](https://github.com/anushkrishnav)
